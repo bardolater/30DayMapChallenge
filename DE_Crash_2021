@@ -1,0 +1,39 @@
+library(ggmap)
+library(maps)
+library(mapdata)
+library(stringr)
+library(tidyverse)
+library(RColorBrewer)
+
+axis_options <- theme(
+  axis.text = element_blank(),
+  axis.line = element_blank(),
+  axis.ticks = element_blank(),
+  panel.border = element_blank(),
+  panel.grid = element_blank(),
+  axis.title = element_blank(),
+  legend.title = element_blank(),
+  panel.background = element_blank(),
+  plot.caption.position = "plot"
+)
+
+crash <- read.csv("./Data/Delaware_Public_Crash_Data_2.0.csv")
+crash$year <- as.factor(stringr::str_sub(crash$CRASH_DATE, 1, 4))
+crash <- crash |> filter(year=="2021")
+crash <- crash |> filter(CRASH_CLASS > 2 ) #only keep personal injury & fatality
+crash$CRASH_CLASS <- as.factor(crash$CRASH_CLASS)
+crash$CRASH_CLASS <- factor(crash$CRASH_CLASS, labels = c("Personal injury", "Fatality"))
+levels(crash$CRASH_CLASS)
+
+de <- map_data("county", "delaware")
+tiff("Delaware.tiff", units="in", width=7, height=8, res=300)
+ggplot(de, aes(long, lat)) +
+  geom_point(data=crash, mapping = aes(x=LONGITUDE,  y=LATITUDE, colour= CRASH_CLASS), size=1, alpha=.2) +
+  geom_polygon(aes(group = group), fill = NA, colour = "grey", size=1) +
+  scale_colour_brewer(palette = "Dark2")+
+  coord_fixed() +
+  guides(colour = guide_legend(override.aes = list(size=10))) +
+  labs(title = "5,716 Crashes in Delaware in 2021", subtitle = "were classified as 'Personal Injury' or 'Fatality'",
+       caption = "Map by @DataAngler@vis.social. Delaware Public Crash Data 2.0 from opendata.firstmap.delaware.gov") +
+  axis_options
+dev.off()
