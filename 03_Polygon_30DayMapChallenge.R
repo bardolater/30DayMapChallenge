@@ -7,7 +7,6 @@
 library(sf)
 library(tidyverse)
 House <- st_read("./BND_LegEnacted_House.shp")
-png("./DE_House_2022_Election.png", height=6, width=5, units="in", res=300)
 ggplot() +
   geom_sf(data=House,aes(fill=PARTY))+
   coord_sf(datum = NA)+  
@@ -18,5 +17,5 @@ ggplot() +
   labs(title="41 Delaware House Districts (2022 Election)",
        subtitle="Democrats hold 11 more seats",x="",y="",
        caption = "Map by @DataAngler@vis.social for #30DayMapChallenge")
-dev.off()
+ggsave("./DE_House_2022_Election.png", height=6, width=5, units="in", res=300)
 
