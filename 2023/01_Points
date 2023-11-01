@@ -1,0 +1,43 @@
+
+### Historic Markers are found here: https://de-firstmap-delaware.hub.arcgis.com/datasets/delaware-historic-markers/explore?location=39.141562%2C-75.421900%2C8.94
+
+
+library(tidyverse)
+library(scales)
+library(here)
+library(sysfonts)
+library(showtext)
+library(sf)
+library(tigris)
+showtext_opts(dpi = 300)
+showtext_auto(enable = TRUE)
+font_add_google("Roboto Condensed")
+font <- "Roboto Condensed"
+historic <- st_read(here("Data/SOC_HistoricMarkers.shp")) 
+historic |> group_by(MARKER_CAT) |> count()
+historic |> filter(MARKER_CAT=="School") |> head(8)
+historic_schools <- historic |>  filter(MARKER_CAT=="School")
+#Data are cleaned manually because there is no identifier for historic markers that were segregated schools
+historic_schools <- historic_schools |> mutate(AfricanAmericanSchool = ifelse(str_detect(CAPTION, "African"), 1, 0))
+historic_schools <- historic_schools |> mutate(AfricanAmericanSchool2 = ifelse(str_detect(CAPTION, "Colored"), 1, AfricanAmericanSchool))
+historic_schools <- historic_schools |> mutate(AfricanAmericanSchool3 = ifelse(str_detect(CAPTION, "colored"), 1, AfricanAmericanSchool2))
+historic_schools <- historic_schools |> mutate(AfricanAmericanSchool4 = ifelse(str_detect(CAPTION, "Blacks"), 1, AfricanAmericanSchool3))
+historic_schools <- historic_schools |> mutate(BrownvBoard = ifelse(MARKER_NAM == "Hockessin School #107C", 1, 0))
+schools <- historic_schools |> filter(COUNTY=="New Castle" & AfricanAmericanSchool4==1)
+counties <- counties("Delaware", cb = T)
+ggplot() +
+  geom_sf(data=counties, fill="white") +
+  geom_sf(data=schools) +
+  geom_point(data=schools, aes(x=LONGITUDE, y = LATITUDE, color=as.factor(BrownvBoard))) +
+  coord_sf() +
+  scale_fill_manual(values=c("#999999","#3399FF")) +
+  theme_void() +
+  labs(subtitle="Blue Data point is for Hockessin School #107C that was party to Brown v. Board.",
+       title="9 Schools for Black Children in New Castle County During State-Enforced Segregation in Delaware",
+       caption="Locations from Delaware's List of Historic Markers. Map by @DataAngler@vis.social for #30DayMapChallenge 2023")+
+  theme(plot.subtitle=element_text(family=font, hjust = 0.5),
+        plot.title = element_text(family=font, hjust = 0.5, size = 12),
+        plot.caption=element_text(family=font,hjust = .5, size=7),
+        legend.position = "none",
+        plot.title.position = "plot")
+ggsave("NCC_Segregated_Schools.png", height=6, width=6.5, bg="#eaf3ee")
