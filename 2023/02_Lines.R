@@ -29,7 +29,7 @@ ggplot() +
   labs(title = "Fatality Crashes in Delaware in <span style = 'color: orange;'>2012</span>
        and in <span style = 'color: blue;'>2022</span>  ",
        caption="Crash Data from Delaware Open Data. Map by @DataAngler@vis.social for #30DayMapChallenge 2023",
-       subtitle="")+
+       subtitle="97 fatality crashes in 2012 and 127 in 2022")+
   coord_sf() +
   theme_void() +
   theme(plot.subtitle=element_text(family=font, hjust = 0.5),
