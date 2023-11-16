@@ -27,7 +27,7 @@ geom_sf(data=usamap2, aes(fill=total_vaccinations_per_hundred)) +
                        name=" ",) +
   coord_sf() +
   theme_void() +
-  labs(title= "Total Vaccination Doses Administered per 100 People, by May 10, 2023",
+  labs(title= "Total COVID-19 Vaccination Doses Administered per 100 People, by May 10, 2023",
        subtitle = "All doses, including boosters",
        caption = "Source: Our World in Data|  #30DayMapChallenge |Map by @DataAngler@vis.social") +
   theme(plot.title = element_text(family = font, hjust = 0.5),
