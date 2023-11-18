@@ -13,6 +13,7 @@ showtext_auto(enable = TRUE)
 font_add_google("Karma")
 
 font1 <- "Karma"
+#Source of data: https://www.ssa.gov/oact/babynames/state/top5_1980.html
 names_1980 <- readxl::read_excel(here("data/babynames_1980.xlsx"))
 names_girls <- names_1980 |> filter(Gender=="Girl") |> rename(GirlName = Name ) |> select(-Gender)
 names_boys <- names_1980 |> filter(Gender=="Boy") |> rename(BoyName = Name ) |> select(-Gender)
