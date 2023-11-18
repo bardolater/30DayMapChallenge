@@ -59,7 +59,7 @@ USA <- df |> dplyr::select(name, Year, Life_Expectancy) |>
 ggplot()+
   geom_sf(data=map_LifeExpectancy, aes(fill=Percent)) +
   scale_fill_gradientn(colours=rev(magma(6)), labels=percent,
-                       name=" ") +
+                       name="Change in Life Expectancy") +
   coord_sf() +
   theme_void() +
   labs(title= "Life expectancy increased greatly for many South American countries from 1950-2021",
@@ -68,8 +68,10 @@ ggplot()+
   theme(plot.title = element_text(family = font, hjust = 0.5, size = 10),
     plot.subtitle =  element_text(family = font, hjust = 0.5, size=9),
     plot.caption = element_text(family = font, hjust = 0.5),
-    legend.position = "top")
-ggsave("./Charts/12_SouthAmerica.png", dpi=300, height=7, width = 6, units="in", bg="beige")
+    legend.position = "right",
+    legend.title  = element_text(family=font,size = 8 ))
+ggsave("./Charts/12_SouthAmerica.png", dpi=300, height=7, width = 7.3, units="in", bg="beige")
+          
                                   
         
 
