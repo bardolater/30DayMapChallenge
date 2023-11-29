@@ -54,7 +54,7 @@ ggplot()+
         plot.caption = element_text(family = font, hjust = 0.5),
         legend.position = "right",
         legend.title  = element_text(family=font,size = 8 ))
-ggsave("./Charts/18_Atmosphere.png", dpi=300, height=7, width = 7.3, units="in", bg="beige")
+ggsave("./Charts/18_Atmosphere.png", dpi=300, height=5, width = 7.3, units="in", bg="beige")
 
 
 
